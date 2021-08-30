@@ -1,0 +1,26 @@
+package projeto1;
+
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.*;
+
+public class Servidor {
+
+	public static void main(String[] args) {
+
+		Socket s;
+		try {
+			s = new Socket("localhost", 2000);
+			DataOutputStream saida = new DataOutputStream(s.getOutputStream());
+			DataInputStream entrada = new DataInputStream(s.getInputStream());
+
+		} catch (IOException ex) {
+
+			Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+			;
+		}
+
+	}
+
+}

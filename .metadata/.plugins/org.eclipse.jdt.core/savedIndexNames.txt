@@ -1,0 +1,3 @@
+INDEX VERSION 1.131+C:\Users\cabes\Documents\IFTM\4Semestre\Sistemas Distribuidos\Projetos\.metadata\.plugins\org.eclipse.jdt.core
+2059437528.index
+157532758.index

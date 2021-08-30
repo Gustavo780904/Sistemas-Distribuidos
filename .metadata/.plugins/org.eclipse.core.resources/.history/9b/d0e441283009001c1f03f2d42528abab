@@ -1,0 +1,15 @@
+package projeto1;
+
+import java.net.*;
+import java.io.*;
+
+public class Servidor {
+
+	public static void main(String[] args) {
+
+Socket s = new Socket("localhost", 2000);
+DataInput
+		
+	}
+
+}

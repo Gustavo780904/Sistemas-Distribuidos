@@ -1,0 +1,14 @@
+package projeto1;
+
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.*;
+
+public class Servidor {
+
+	public static void main(String[] args) {
+
+			}
+
+}
