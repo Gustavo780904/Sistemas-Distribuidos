@@ -19,8 +19,8 @@ public class Cliente {
 			DataOutputStream saida = new DataOutputStream(conexao.getOutputStream());
 			String linha;
 			BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
-			 
-			while(true) {
+
+			while (true) {
 				System.out.print("> ");
 				linha = teclado.readLine();
 				saida.writeUTF(linha);
@@ -28,9 +28,10 @@ public class Cliente {
 				if (linha.equalsIgnoreCase("")) {
 					System.out.println("Conexão encerrada!");
 					break;
-				};
+				}
+				;
 				System.out.println(linha);
-				
+
 			}
 		} catch (IOException e) {
 			Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, e);
