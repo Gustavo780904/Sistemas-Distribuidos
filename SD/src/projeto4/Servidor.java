@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Servidor extends Thread {
-	private static Vector clientes;
+	private static Vector<PrintStream> clientes;
 	private Socket conexao;
 	private String meuNome;
 
@@ -47,14 +47,14 @@ public class Servidor extends Thread {
 	}
 
 	public void sendToAll(PrintStream saida, String acao, String linha) throws IOException {
-		Enumeration e = clientes.elements();
+		Enumeration<PrintStream> e = clientes.elements();
 
 		while (e.hasMoreElements()) {
 			PrintStream chat = (PrintStream) e.nextElement();
 			if (chat != saida) {
 				chat.println(meuNome + acao + linha);
 			}
-			if (acao == " saiu ") {
+			if (acao == "saiu") {
 				if (chat == saida)
 					chat.println("");
 			}
@@ -64,7 +64,7 @@ public class Servidor extends Thread {
 	public static void main(String[] args) {
 
 		try {
-			clientes = new Vector();
+			clientes = new Vector<PrintStream>();
 			ServerSocket s = new ServerSocket(2000);
 			while (true) {
 				try {

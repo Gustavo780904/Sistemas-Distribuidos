@@ -8,8 +8,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-
 public class Cliente extends Thread {
 	private static boolean done = false;
 	private Socket conexao;
@@ -43,16 +41,13 @@ public class Cliente extends Thread {
 	}
 
 	public static void main(String[] args) {
-
+			
 		try {
 			Socket conexao = new Socket("localhost", 2000);
 			PrintStream saida = new PrintStream(conexao.getOutputStream());
 			BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
 			System.out.print("Entre com o seu nome: ");
-//			String nome = JOptionPane.showInputDialog("Digite o nome: ");
 			String nome = teclado.readLine();
-//			JOptionPane.showMessageDialog(null, "Nome Completo: "+nome,"Informação",JOptionPane.INFORMATION_MESSAGE);
-
 			saida.println(nome);
 			Thread t = new Cliente(conexao);
 			t.start();
