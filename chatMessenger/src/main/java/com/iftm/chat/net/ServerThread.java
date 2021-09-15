@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import com.iftm.chat.util.Logger;
 
 public class ServerThread extends Thread {
@@ -34,7 +36,6 @@ public class ServerThread extends Thread {
     }
     
 	public static void main(String args[]) {
-		
         try (var server = new ServerSocket(5555)) {
             System.out.println("Socket Servidor rodando na porta 5555");
             
@@ -64,9 +65,10 @@ public class ServerThread extends Thread {
             var saida = new PrintStream(conexao.getOutputStream());
             
             if (!armazena(this.nomeCliente)) {
-                saida.println("Este nome ja existe! Conecte novamente com outro Nome.");
+            	JOptionPane.showMessageDialog(null, "Este nome de usuário ja existe! Conecte novamente com outro nome.");
+                saida.println("Este nome ja existe! Conecte novamente com outro nome.");
                 saida.close();
-                System.out.println(">>> EXISTE: " + nomeCliente);
+                System.out.println(">>>JÁ EXISTE: " + nomeCliente);
                 
                 return;
             } else {
