@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -33,8 +34,10 @@ public class ChatWindow extends JFrame {
 		this.clientThread = clientThread;
 		
 		setTitle("Chat: " + clientName);
-		init();
 		
+		//e se o nome ja existir? Está conectando pra depois conectar, tem que criar 
+		//um meio para não abrir a janela. 
+		init();
 		updateClients();
 	}
 
@@ -98,6 +101,8 @@ public class ChatWindow extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				disconnect();
+				//teste para atualizar a lista ao desconectar
+				updateClients();
 			}
 		});
 		
@@ -111,6 +116,7 @@ public class ChatWindow extends JFrame {
 		chatArea.append("\n" + clientThread.getLastMessage());
 	}
 	
+	//atualisa a lista de clientes na caixa de seleção
 	private void updateClients() {
 		clientsComboBox.removeAllItems();
 		var clients = clientThread.getClients();
@@ -140,5 +146,7 @@ public class ChatWindow extends JFrame {
 		new Thread(() -> {
 			clientThread.send("");
 		}).start();
+		//teste
+		updateClients();
 	};
 }

@@ -64,22 +64,17 @@ public class ServerThread extends Thread {
             
             var saida = new PrintStream(conexao.getOutputStream());
             
-            if (!armazena(this.nomeCliente)) {
-            	JOptionPane.showMessageDialog(null, "Este nome de usuário ja existe! Conecte novamente com outro nome.");
-                saida.println("Este nome ja existe! Conecte novamente com outro nome.");
+            if (add(nomeCliente, saida)) {
+            	//mostra o nome do cliente conectado ao servidor
+                System.out.println(nomeCliente + " : Conectado ao Servidor!");
+                //Quando o cliente se conectar recebe todos que estão conectados
+                send(saida, CONECTADOS, LISTA_DE_NOMES.toArray(new String[LISTA_DE_NOMES.size()]));
+            } else {
+                saida.println("Este nome (" + nomeCliente + ") ja existe! Conecte novamente com outro nome.");
                 saida.close();
                 System.out.println(">>>JÁ EXISTE: " + nomeCliente);
                 
                 return;
-            } else {
-            	//adiciona os dados de saida do cliente no objeto MAP_CLIENTES
-                //A chave será o nome e valor o printstream
-                MAP_CLIENTES.put(nomeCliente, saida);
-            	
-                //mostra o nome do cliente conectado ao servidor
-                System.out.println(nomeCliente + " : Conectado ao Servidor!");
-                //Quando o cliente se conectar recebe todos que estão conectados
-                send(saida, CONECTADOS, LISTA_DE_NOMES.toArray(new String[LISTA_DE_NOMES.size()]));
             }
             
             var msg = entrada.readLine();
@@ -92,34 +87,31 @@ public class ServerThread extends Thread {
             }
             
             System.out.println(nomeCliente + " saiu do bate-papo!");
-            String[] out = {" do bate-papo!"};
+            String[] out = { " do bate-papo!" };
             send(saida, SAIU, out);
             remove(nomeCliente);
-            MAP_CLIENTES.remove(nomeCliente);
+            send(saida, CONECTADOS, LISTA_DE_NOMES.toArray(new String[LISTA_DE_NOMES.size()]));
             conexao.close();
         } catch (IOException e) {
             System.out.println("Falha na Conexao... .. ." + " IOException: " + e);
         }
     }
 	
-	private boolean armazena(String newName) {
-        for (int i = 0; i < LISTA_DE_NOMES.size(); i++) {
-            if (LISTA_DE_NOMES.get(i).equals(newName))
-                return false;
-        }
+	private boolean add(String newName, PrintStream saida) {
+        if (LISTA_DE_NOMES.contains(newName))
+            return false;
         
         LISTA_DE_NOMES.add(newName);
+        MAP_CLIENTES.put(nomeCliente, saida);
         
         return true;
     }
 	
     private void remove(String oldName) {
-        for (int i = 0; i < LISTA_DE_NOMES.size(); i++) {
-            if (LISTA_DE_NOMES.get(i).equals(oldName))
-                LISTA_DE_NOMES.remove(oldName);
-        }
+        if (LISTA_DE_NOMES.remove(oldName))
+        	MAP_CLIENTES.remove(nomeCliente);
     }
-	
+
     /**
      * Se o array da msg tiver tamanho igual a 1, então envia para todos
      * Se o tamanho for 2, envia apenas para o cliente escolhido
