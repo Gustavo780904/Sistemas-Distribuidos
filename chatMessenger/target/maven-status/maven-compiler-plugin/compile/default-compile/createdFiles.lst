@@ -1,5 +1,7 @@
-com\iftm\chat\ClientApp.class
+com\iftm\chat\ServerApp.class
 com\iftm\chat\util\Logger.class
 com\iftm\chat\net\ServerThread.class
 com\iftm\chat\ui\ChatWindow.class
 com\iftm\chat\net\ClientThread.class
+com\iftm\chat\ClientApp.class
+com\iftm\chat\ui\ChatWindow$1.class
