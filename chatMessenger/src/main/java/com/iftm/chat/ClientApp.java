@@ -18,37 +18,13 @@ public class ClientApp {
 	private static String name;
 	
 	public static void main(String args[]) {
-		try {
-			// instancia a thread para ip e porta conectados e depois a inicia
-			var thread = new ClientThread();
-			
-			if (showUI) {
-				thread.addPropertyChangeListener("clients", e -> {
-					if (!connected && thread.getClients().contains(name)) {
-						connected = true;
-						
-						SwingUtilities.invokeLater(() -> {
-							var window = new ChatWindow(name, thread);
-							window.setLocationRelativeTo(null);
-							window.setVisible(true);
-						});
-					}
-				});
-				thread.addPropertyChangeListener("lastMessage", e -> {
-					var msg = (String) e.getNewValue();
-					
-					if (!connected && msg.startsWith("Este nome (" + name + ") ja existe!")) {
-						JOptionPane.showMessageDialog(null, "Este nome de usuário ja existe! Escolha outro nome.");
-						name = JOptionPane.showInputDialog("Informe o seu nome:").toUpperCase();
-						thread.send(name);
-						thread.start();
-					}
-				});
+		if (showUI) {
+			startUI();
+		} else {
+			try {
+				// instancia a thread para ip e porta conectados e depois a inicia
+				var thread = new ClientThread();
 				
-				name = JOptionPane.showInputDialog("Informe o seu nome:").toUpperCase();
-				thread.send(name);
-				thread.start();
-			} else {
 				var teclado = new BufferedReader(new InputStreamReader(System.in));
 				System.out.print("Digite seu nome: ");
 				var name = teclado.readLine();
@@ -56,7 +32,7 @@ public class ClientApp {
 				thread.send(name.toUpperCase());
 				thread.start();
 				
-				// Cria a variavel msg responsavel por enviar a mensagem para o servidor
+				// Variavel msg recebe a mensagem a ser enviada ao servidor
 				String msg;
 				
 				while (true) {
@@ -66,9 +42,43 @@ public class ClientApp {
 					// envia a mensagem para o servidor
 					thread.send(msg);
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			System.out.println("Falha na Conexao... .. ." + " IOException: " + e);
+		}
+	}
+
+	private static void startUI() {
+		try {
+			// instancia a thread para ip e porta conectados e depois a inicia
+			var thread = new ClientThread();
+			
+			thread.addPropertyChangeListener("clients", e -> {
+				if (!connected && thread.getClients().contains(name)) {
+					connected = true;
+					
+					SwingUtilities.invokeLater(() -> {
+						var window = new ChatWindow(name, thread);
+						window.setLocationRelativeTo(null);
+						window.setVisible(true);
+					});
+				}
+			});
+			thread.addPropertyChangeListener("lastMessage", e -> {
+				var msg = (String) e.getNewValue();
+				
+				if (!connected && msg.startsWith("Este nome (" + name + ") ja existe!")) {
+					JOptionPane.showMessageDialog(null, "Este nome de usuário já existe! Tente com outro nome.");
+					System.exit(0);
+				}
+			});
+			
+			name = JOptionPane.showInputDialog("Informe o seu nome:").toUpperCase();
+			
+			thread.send(name);
+			thread.start();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

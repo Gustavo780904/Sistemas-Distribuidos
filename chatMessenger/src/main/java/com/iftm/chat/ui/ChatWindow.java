@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ import com.iftm.chat.net.ClientThread;
 public class ChatWindow extends JFrame {
 	
 	private JTextArea chatArea;
+	private JCheckBox allCheckBox;
 	private JComboBox<String> clientsComboBox;
 	private JTextField messageTextField;
 	private JButton sendButton;
@@ -49,9 +51,14 @@ public class ChatWindow extends JFrame {
 		chatArea.setWrapStyleWord(true);
 		clientThread.addPropertyChangeListener("lastMessage", e -> updateChat());
 		
-		// Lista de clientes
-		var clientsLabel = new JLabel("Conectados:");
+		// Envio / Lista de clientes
+		var clientsLabel = new JLabel("Enviar Para:");
+		allCheckBox = new JCheckBox("Todos", false);
+		allCheckBox.addItemListener(e -> {
+			clientsComboBox.setEnabled(!allCheckBox.isSelected());
+		});
 		clientsComboBox = new JComboBox<>();
+		clientsComboBox.setEnabled(!allCheckBox.isSelected());
 		clientThread.addPropertyChangeListener("clients", e -> updateClients());
 		
 		// Campo para escrever a mensagem
@@ -76,6 +83,7 @@ public class ChatWindow extends JFrame {
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(clientsLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
    						.addComponent(clientsComboBox, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+   						.addComponent(allCheckBox, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
 				)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(messageLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
@@ -89,6 +97,7 @@ public class ChatWindow extends JFrame {
 				.addGroup(layout.createParallelGroup(Alignment.CENTER)
 						.addComponent(clientsLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
 						.addComponent(clientsComboBox, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+						.addComponent(allCheckBox, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
 				)
 				.addGroup(layout.createParallelGroup(Alignment.CENTER)
 						.addComponent(messageLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
@@ -130,15 +139,21 @@ public class ChatWindow extends JFrame {
 	private void sendMessage() {
 		var msg = messageTextField.getText();
 		
-		if (msg.isBlank())
+		if (msg.isBlank() || clientsComboBox.getItemCount() == 0)
 			return;
 		
 		messageTextField.setText("");
+		
+		if (!allCheckBox.isSelected())
+			msg += " " + "@" + clientsComboBox.getSelectedItem();
+		
 		chatArea.append("\n\t" + msg);
+		
+		var finalMsg = msg;
 		
 		// Pra nao enviar na thread do Swing
 		new Thread(() -> {
-			clientThread.send(msg);
+			clientThread.send(finalMsg);
 		}).start();
 	}
 	
