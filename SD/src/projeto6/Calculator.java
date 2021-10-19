@@ -3,6 +3,7 @@ package projeto6;
 import static javax.swing.GroupLayout.DEFAULT_SIZE;
 import static javax.swing.GroupLayout.PREFERRED_SIZE;
 
+import java.awt.Dimension;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -14,7 +15,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -69,7 +69,7 @@ public class Calculator extends JFrame {
 
 	private void initComponents() {
 		// area da calculadora:
-		var calcLabel = new JLabel("Calculadora");
+		
 		calcArea = new JTextArea();
 		calcArea.setLineWrap(true);
 		calcArea.setWrapStyleWord(true);
@@ -203,6 +203,9 @@ public class Calculator extends JFrame {
 						)
 						
 			);
+		setPreferredSize(new Dimension(250, 250));
+		setTitle("Calculadora");
+		pack();
 	}
 
 	private void jButtonOne (java.awt.ActiveEvent evt) {
@@ -265,11 +268,6 @@ public class Calculator extends JFrame {
 		count = "";
 		visor.setText(count);
 	}
-	private void jEqual (java.awt.ActiveEvent evt) {
-		count += "x";
-		visor.setText(count);
-	}
-	
 	
 	private void result() {
 
