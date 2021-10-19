@@ -205,6 +205,7 @@ public class Calculator extends JFrame {
 			);
 		setPreferredSize(new Dimension(250, 250));
 		setTitle("Calculadora");
+		setResizable(false);
 		pack();
 	}
 
