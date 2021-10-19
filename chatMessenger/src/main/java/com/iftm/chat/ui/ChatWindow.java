@@ -1,6 +1,7 @@
 package com.iftm.chat.ui;
 
-import static javax.swing.GroupLayout.*;
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -13,7 +14,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -91,6 +91,7 @@ public class ChatWindow extends JFrame {
 				)
 				.addComponent(sendButton, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
 		);
+		
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addComponent(chatLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
 				.addComponent(chatArea, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
